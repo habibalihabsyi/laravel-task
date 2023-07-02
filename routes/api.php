@@ -22,6 +22,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 Route::group(['prefix' => 'v1'], function(){
     Route::post('/login', [AuthController::class, 'login']);
-    Route::resource('/tasks', TaskController::class);
-    Route::resource('/users', UserController::class)->except(['create', 'edit']);
+    Route::group(['middleware' => 'auth:sanctum'], function(){
+        Route::resource('/tasks', TaskController::class);
+        Route::resource('/users', UserController::class)->except(['create', 'edit']);
+    });
 });

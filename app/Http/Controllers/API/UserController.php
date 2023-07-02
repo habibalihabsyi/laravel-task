@@ -12,6 +12,10 @@ use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['role:Super Admin|Admin']);
+    }
     public function index(){
         try {
             $users = User::whereDoesntHave('roles', fn($q) => $q->where('name','Super Admin'))->get();
