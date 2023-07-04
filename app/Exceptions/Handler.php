@@ -43,5 +43,11 @@ class Handler extends ExceptionHandler
                 'message' => 'You do not have permission'
             ]);
         });
+        $this->renderable(function (\Symfony\Component\HttpKernel\Exception\NotFoundHttpException $e, $request){
+            return response()->json([
+                'success' => false,
+                'message' => 'Not Found',
+            ], 404);
+        });
     }
 }
