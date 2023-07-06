@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\TaskResource;
 use App\Http\Resources\TaskShowResource;
 use App\Models\Comment;
+use App\Models\Image;
 use App\Models\Task;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class TaskController extends Controller
@@ -105,7 +107,15 @@ class TaskController extends Controller
             $comment = new Comment();
             $comment->body = $request->body;
             $task->comments()->save($comment);
-            return $this->successResponse($comment->body, 'Comment successfully');
+            if($request->has('image')){
+                $image = $request->file('image');
+                $image_name = time().'_'.$image->getClientOriginalName();
+                $path = Storage::putFileAs('public/images', $image, $image_name);
+                $imagePath = new Image();
+                $imagePath->path = $path;
+                $comment->images()->save($imagePath);
+            }
+            return $this->successResponse([], 'Comment successfully');
         } catch (\Throwable $th) {
             return $this->unknownResponse($th);
         }

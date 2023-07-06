@@ -26,4 +26,7 @@ class Comment extends Model
             $model->user_id = $user->id;
         });
     }
+    public function images(){
+        return $this->morphMany(Image::class,'imageable');
+    }
 }
