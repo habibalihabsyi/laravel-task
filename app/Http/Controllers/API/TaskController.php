@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\TaskResource;
+use App\Http\Resources\TaskShowResource;
 use App\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -50,7 +51,7 @@ class TaskController extends Controller
     }
     public function show(Task $task){
         try {
-            return $this->successResponse(new TaskResource($task), 'Get Task', 200);
+            return $this->successResponse(new TaskShowResource($task), 'Get Task', 200);
         } catch (\Throwable $th) {
             return $this->unknownResponse($th);
         }
@@ -86,6 +87,14 @@ class TaskController extends Controller
         try {
             $task->delete();
             return $this->successResponse([], 'Succesfully delete Task', 200);
+        } catch (\Throwable $th) {
+            return $this->unknownResponse($th);
+        }
+    }
+    public function assignTask(Task $task, Request $request){
+        try {
+            $task->users()->sync($request->user_id);
+            return $this->successResponse('Task assigned successfully');
         } catch (\Throwable $th) {
             return $this->unknownResponse($th);
         }

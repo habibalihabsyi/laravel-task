@@ -25,6 +25,7 @@ Route::group(['prefix' => 'v1'], function(){
     Route::group(['middleware' => 'auth:sanctum'], function(){
         Route::post('/logout', [AuthController::class, 'logout']);
         Route::resource('/tasks', TaskController::class);
+        Route::post('/assignTask/{task}', [TaskController::class, 'assignTask']);
         Route::resource('/users', UserController::class)->except(['create', 'edit']);
     });
 });

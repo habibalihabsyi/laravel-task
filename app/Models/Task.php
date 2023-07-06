@@ -31,4 +31,7 @@ class Task extends Model
             $model->creator_id = $user->id;
         });
     }
+    public function users(){
+        return $this->belongsToMany(User::class, 'user_tasks')->withTimestamps();
+    }
 }

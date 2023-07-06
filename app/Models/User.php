@@ -44,4 +44,8 @@ class User extends Authenticatable
     ];
     protected $guard_name = 'api';
 
+    public function tasks(){
+        return $this->belongsToMany(Task::class, 'user_tasks');
+    }
+
 }
