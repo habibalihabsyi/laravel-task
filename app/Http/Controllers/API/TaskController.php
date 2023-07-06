@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\TaskResource;
 use App\Http\Resources\TaskShowResource;
+use App\Models\Comment;
 use App\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -94,7 +95,17 @@ class TaskController extends Controller
     public function assignTask(Task $task, Request $request){
         try {
             $task->users()->sync($request->user_id);
-            return $this->successResponse('Task assigned successfully');
+            return $this->successResponse([], 'Task assigned successfully');
+        } catch (\Throwable $th) {
+            return $this->unknownResponse($th);
+        }
+    }
+    public function commentTask(Task $task, Request $request){
+        try {
+            $comment = new Comment();
+            $comment->body = $request->body;
+            $task->comments()->save($comment);
+            return $this->successResponse($comment->body, 'Comment successfully');
         } catch (\Throwable $th) {
             return $this->unknownResponse($th);
         }

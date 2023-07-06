@@ -6,18 +6,13 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Task extends Model
+class Comment extends Model
 {
     use HasFactory, HasUuids;
-    protected $fillable = [
-        'title',
-        'description',
-        'start_at',
-        'end_at',
-        'status',
-        'priority',
-    ];
-
+    public function commentable()
+    {
+        return $this->morphTo();
+    }
     protected static function boot()
     {
         parent::boot();
@@ -28,14 +23,7 @@ class Task extends Model
             $user = auth()->user();
 
             // Menyimpan user_id ke atribut model
-            $model->creator_id = $user->id;
+            $model->user_id = $user->id;
         });
-    }
-    public function users(){
-        return $this->belongsToMany(User::class, 'user_tasks')->withTimestamps();
-    }
-    public function comments()
-    {
-        return $this->morphMany(Comment::class, 'commentable');
     }
 }

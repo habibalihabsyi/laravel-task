@@ -26,6 +26,7 @@ Route::group(['prefix' => 'v1'], function(){
         Route::post('/logout', [AuthController::class, 'logout']);
         Route::resource('/tasks', TaskController::class);
         Route::post('/assignTask/{task}', [TaskController::class, 'assignTask']);
+        Route::post('/commentTask/{task}', [TaskController::class, 'commentTask']);
         Route::resource('/users', UserController::class)->except(['create', 'edit']);
     });
 });
